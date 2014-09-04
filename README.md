@@ -16,7 +16,10 @@ paypal_web_checkout:
     debug: true|false
     
     # By default, controller route is /payment/paypal_web_checkout/execute
-    controller_route: /my/custom/route
+    controller_route:
+        en: /payment/paypal_web_checkout/execute
+        es: /pago/paypal_web_checkout/execute
+        fr: /paiement/paypal_web_checkout/execute
 
     # Configuration for payment success redirection
     #
