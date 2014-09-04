@@ -54,6 +54,13 @@ class PaypalWebCheckoutManager
     protected $config;
 
     /**
+     * @var string $locale
+     *
+     * Locale
+     */
+    protected $locale;
+
+    /**
      * Construct method for paypal manager
      *
      * @param PaymentEventDispatcher $paymentEventDispatcher Event dispatcher
@@ -68,6 +75,17 @@ class PaypalWebCheckoutManager
         $this->paymentEventDispatcher = $paymentEventDispatcher;
         $this->paymentBridge = $paymentBridge;
         $this->paypalFormTypeWrapper = $paypalFormTypeWrapper;
+    }
+
+    /**
+     * Set locale
+     * @param string $locale Locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 
     /**
@@ -108,6 +126,7 @@ class PaypalWebCheckoutManager
 
         $formView = $this
             ->paypalFormTypeWrapper
+            ->setLocale($this->locale)
             ->buildForm();
 
         return $formView;
@@ -179,16 +198,16 @@ class PaypalWebCheckoutManager
 
         foreach ($list as $item) {
             if (!isset($parameters[$item])) {
-               throw new ParameterNotReceivedException($item);
+                throw new ParameterNotReceivedException($item);
             }
         }
     }
 
     /**
      * Check if transaction is complete
-     * 
+     *
      * @param array $response Paypal response
-     * 
+     *
      * @return boolean
      */
     public function transactionSuccessful($response)
