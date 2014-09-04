@@ -34,7 +34,10 @@ class PaypalWebCheckoutController extends Controller
      */
     public function executeAction(Request $request)
     {
-        $formView = $this->get('paypal_web_checkout.manager')->processPayment();
+        $formView = $this
+            ->get('paypal_web_checkout.manager')
+            ->setLocale($request->getLocale())
+            ->processPayment();
 
         return $this->render('PaypalWebCheckoutBundle:Paypal:process.html.twig', array(
             'paypal_form' => $formView,
