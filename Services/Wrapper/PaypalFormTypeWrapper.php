@@ -32,63 +32,70 @@ class PaypalFormTypeWrapper
      *
      * Payment bridge
      */
-    private $paymentBridge;
+    protected $paymentBridge;
 
     /**
      * @var Router
      *
      * Router
      */
-    private $router;
+    protected $router;
 
     /**
      * @var string $business
      *
      * Merchant identifier
      */
-    private $business;
+    protected $business;
 
     /**
      * @var string $paypalUrl
      *
      * Paypal web url
      */
-    private $paypalUrl;
+    protected $paypalUrl;
 
     /**
      * @var string $returnUrl
      *
      * Route for success payment
      */
-    private $returnUrl;
+    protected $returnUrl;
 
     /**
      * @var string $cancelReturnUrl
      *
      * Route for fail payment
      */
-    private $cancelReturnUrl;
+    protected $cancelReturnUrl;
 
     /**
      * @var string $notifyUrl
      *
      * Route for process payment
      */
-    private $notifyUrl;
+    protected $notifyUrl;
 
     /**
      * @var boolean $debug
      *
      * Debug enviroment
      */
-    private $debug;
+    protected $debug;
 
     /**
      * @var string $env
      *
      * Environment
      */
-    private $env;
+    protected $env;
+
+    /**
+     * @var string $locale
+     *
+     * Locale
+     */
+    protected $locale;
 
     /**
      * Formtype construct method
@@ -127,6 +134,17 @@ class PaypalFormTypeWrapper
     }
 
     /**
+     * Set locale
+     * @param string $locale Locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
      * Builds form given return, success and fail urls
      *
      * @return \Symfony\Component\Form\FormView
@@ -145,10 +163,20 @@ class PaypalFormTypeWrapper
         /**
          * Create routes
          */
-        $returnUrl = $this->router->generate($this->returnRouteName, [], true);
-        $cancelReturnUrl = $this->router->generate($this->cancelReturnRouteName, [], true);
+        $returnUrl = $this->router->generate(
+            $this->returnRouteName.'.'.$this->locale,
+            [],
+            true
+        );
+
+        $cancelReturnUrl = $this->router->generate(
+            $this->cancelReturnRouteName.'.'.$this->locale,
+            [],
+            true
+        );
+
         $notifyUrl = $this->router->generate(
-            $this->notifyRouteName,
+            $this->notifyRouteName.'.'.$this->locale,
             [ 'order_id' => $this->paymentBridge->getOrderNumber() ],
             true
         );
