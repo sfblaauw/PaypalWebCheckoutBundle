@@ -165,7 +165,7 @@ class PaypalWebCheckoutManager
          * This information is only available in PaymentOrderSuccess event
          */
         $paypalMethod
-            ->setOrderNumber($orderId);
+            ->setOrderId($orderId);
 
         /**
          * Payment paid successfully

@@ -156,7 +156,7 @@ class PaypalFormTypeWrapper
             ->formFactory
             ->createNamedBuilder(null);
 
-        $itemNumber = $this->paymentBridge->getOrderNumber();
+        $itemNumber = $this->paymentBridge->getOrderId();
         $amount = $this->paymentBridge->getAmount()->getAmount()/100;
         $currency = $this->checkCurrency($this->paymentBridge->getCurrency());
 
@@ -177,7 +177,7 @@ class PaypalFormTypeWrapper
 
         $notifyUrl = $this->router->generate(
             $this->notifyRouteName.'.'.$this->locale,
-            [ 'order_id' => $this->paymentBridge->getOrderNumber() ],
+            [ 'order_id' => $this->paymentBridge->getOrderId() ],
             true
         );
 
