@@ -175,22 +175,22 @@ class PaypalFormTypeWrapper
             ->setAction($this->urlFactory->getPaypalBaseUrl())
             ->setMethod('POST')
             ->add('business', 'hidden', array(
-                'data' => $this->business,
+                'empty_data' => $this->business,
             ))
             ->add('return', 'hidden', array(
-                'data' => $returnUrl,
+                'empty_data' => $returnUrl,
             ))
             ->add('cancel_return', 'hidden', array(
-                'data' => $cancelUrl,
+                'empty_data' => $cancelUrl,
             ))
             ->add('notify_url', 'hidden', array(
-                'data' => $processUrl,
+                'empty_data' => $processUrl,
             ))
             ->add('currency_code', 'hidden', array(
-                'data' => $currency,
+                'empty_data' => $currency,
             ))
             ->add('env', 'hidden', array(
-                'data' => $this->env,
+                'empty_data' => $this->env,
             ))
         ;
 
@@ -216,19 +216,19 @@ class PaypalFormTypeWrapper
         foreach ($items as $orderLine) {
             $formBuilder
                 ->add('item_name_'.$iter, 'hidden', array(
-                    'data' => $orderLine['item_name']
+                    'empty_data' => $orderLine['item_name']
                 ))
                 ->add('amount_'.$iter, 'hidden', array(
-                    'data' => $orderLine['amount'],
+                    'empty_data' => $orderLine['amount'],
                 ))
                 ->add('quantity_'.$iter, 'hidden', array(
-                    'data' => $orderLine['quantity'],
+                    'empty_data' => $orderLine['quantity'],
                 ))
             ;
             $iter++;
         }
 
-        return $formBuilder->getForm()->createView();
+        return $formBuilder->getForm();
     }
 
     public function checkCurrency($currency)

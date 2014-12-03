@@ -16,6 +16,7 @@ namespace PaymentSuite\PaypalWebCheckoutBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use PaymentSuite\PaymentCoreBundle\Exception\PaymentException;
 use PaymentSuite\PaypalWebCheckoutBundle\Exception\ParameterNotReceivedException;
@@ -36,15 +37,20 @@ class PaypalWebCheckoutController extends Controller
      */
     public function executeAction(Request $request)
     {
-        /*
-         * The execute action will generate the Paypal web
-         * checkout form before redirecting
-         */
-        $formView = $this->get('paypal_web_checkout.manager')->generatePaypalForm();
+        $form = $this->get('paypal_web_checkout.manager')->generatePaypalForm();
+        $form
+            ->add('cmd', 'hidden', array('empty_data' => '_cart'))
+            ->add('upload', 'hidden', array('empty_data' => 1))
+            ->add('lc', 'hidden', array('empty_data' => $request->getLocale()))
+        ;
+        $form->submit(null, true);
 
-        return $this->render('PaypalWebCheckoutBundle:Paypal:process.html.twig', array(
-            'paypal_form' => $formView,
-        ));
+        $action = $form->getConfig()->getAction();
+        $url = $action.'?'.http_build_query($form->getData());
+
+        $respone = RedirectResponse::create($url);
+
+        return $respone;
     }
 
     /**
