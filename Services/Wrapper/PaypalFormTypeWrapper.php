@@ -175,22 +175,22 @@ class PaypalFormTypeWrapper
             ->setAction($this->urlFactory->getPaypalBaseUrl())
             ->setMethod('POST')
             ->add('business', 'hidden', array(
-                'empty_data' => $this->business,
+                'data' => $this->business,
             ))
             ->add('return', 'hidden', array(
-                'empty_data' => $returnUrl,
+                'data' => $returnUrl,
             ))
             ->add('cancel_return', 'hidden', array(
-                'empty_data' => $cancelUrl,
+                'data' => $cancelUrl,
             ))
             ->add('notify_url', 'hidden', array(
-                'empty_data' => $processUrl,
+                'data' => $processUrl,
             ))
             ->add('currency_code', 'hidden', array(
-                'empty_data' => $currency,
+                'data' => $currency,
             ))
             ->add('env', 'hidden', array(
-                'empty_data' => $this->env,
+                'data' => $this->env,
             ))
         ;
 
@@ -216,19 +216,27 @@ class PaypalFormTypeWrapper
         foreach ($items as $orderLine) {
             $formBuilder
                 ->add('item_name_'.$iter, 'hidden', array(
-                    'empty_data' => $orderLine['item_name']
+                    'data' => $orderLine['item_name']
                 ))
                 ->add('amount_'.$iter, 'hidden', array(
-                    'empty_data' => $orderLine['amount'],
+                    'data' => $orderLine['amount'],
                 ))
                 ->add('quantity_'.$iter, 'hidden', array(
-                    'empty_data' => $orderLine['quantity'],
+                    'data' => $orderLine['quantity'],
                 ))
             ;
+
+            if (isset($orderLine['item_number'])) {
+                $formBuilder->add('item_number_'.$iter, 'hidden', array(
+                    'data' => $orderLine['item_number']
+                ));
+            }
+
             $iter++;
         }
 
-        return $formBuilder->getForm();
+        return $formBuilder->getForm()->createView();
+        //return $formBuilder->getForm();
     }
 
     public function checkCurrency($currency)

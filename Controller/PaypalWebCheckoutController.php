@@ -37,7 +37,7 @@ class PaypalWebCheckoutController extends Controller
      */
     public function executeAction(Request $request)
     {
-        $form = $this->get('paypal_web_checkout.manager')->generatePaypalForm();
+        /*$form = $this->get('paypal_web_checkout.manager')->generatePaypalForm();
         $form
             ->add('cmd', 'hidden', array('empty_data' => '_cart'))
             ->add('upload', 'hidden', array('empty_data' => 1))
@@ -48,7 +48,17 @@ class PaypalWebCheckoutController extends Controller
         $action = $form->getConfig()->getAction();
         $url = $action.'?'.http_build_query($form->getData());
 
-        $respone = RedirectResponse::create($url);
+        $respone = RedirectResponse::create($url);*/
+
+        /*
+         * The execute action will generate the Paypal web
+         * checkout form before redirecting
+         */
+        $formView = $this->get('paypal_web_checkout.manager')->generatePaypalForm();
+
+        return $this->render('PaypalWebCheckoutBundle:Paypal:process.html.twig', array(
+            'paypal_form' => $formView,
+        ));
 
         return $respone;
     }
