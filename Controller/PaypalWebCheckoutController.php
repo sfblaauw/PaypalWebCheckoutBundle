@@ -14,9 +14,9 @@
 namespace PaymentSuite\PaypalWebCheckoutBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use PaymentSuite\PaymentCoreBundle\Exception\PaymentException;
 use PaymentSuite\PaypalWebCheckoutBundle\Exception\ParameterNotReceivedException;
@@ -33,7 +33,7 @@ class PaypalWebCheckoutController extends Controller
      *
      * @param Request $request Request element
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function executeAction(Request $request)
     {
@@ -48,9 +48,7 @@ class PaypalWebCheckoutController extends Controller
         $action = $form->getConfig()->getAction();
         $url = $action.'?'.http_build_query($form->getData());
 
-        $respone = RedirectResponse::create($url);
-
-        return $respone;
+        return RedirectResponse::create($url, 200);
     }
 
     /**
@@ -136,7 +134,6 @@ class PaypalWebCheckoutController extends Controller
                     $pe->getMessage()
                 )
             );
-
         }
 
         return new Response('OK', 200);
